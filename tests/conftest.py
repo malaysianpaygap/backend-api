@@ -1,7 +1,9 @@
-import pytest
-from pathlib import Path
 import json
+from pathlib import Path
+
 import psycopg2
+import pytest
+from lambda_func.post_form import Credentials
 
 
 def get_lambda_event(path: str) -> dict:
@@ -19,24 +21,16 @@ def get_lambda_event(path: str) -> dict:
         raise e
 
 
-def get_db_credentials() -> dict:
-    """
-    Creates the credentials needed to connect to the local postgres db for
-    testing purposes
-    """
-    return dict(
-        user="postgres",
-        host="localhost",
-        database="postgres",
-        password="postgres",
-        port=5432,
-    )
-
-
 @pytest.fixture(scope="module")
 def db_connection():
-    credentials = get_db_credentials()
-    connection = psycopg2.connect(**credentials)
+    credentials = Credentials(
+        user="postgres",
+        password="postgres",
+        host="localhost",
+        port=5432,
+        database="postgres",
+    )
+    connection = psycopg2.connect(**json.loads(credentials.json()))
     connection.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
     return connection
 
