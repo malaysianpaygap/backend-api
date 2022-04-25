@@ -13,6 +13,7 @@ Create the conda environment
 ```bash
 conda create --name api python=3.7
 conda activate api
+pip install -r dev_requirements.txt
 ```
 
 ## Running Tests
