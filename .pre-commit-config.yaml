@@ -32,5 +32,5 @@ repos:
     rev: v0.910
     hooks:
       - id: mypy
-        files: ^src/
+        files: ^lambda_func/
         args: []
