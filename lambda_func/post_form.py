@@ -2,7 +2,7 @@ import base64
 import json
 
 import boto3
-import psycopg2.extras
+import psycopg2
 from botocore.exceptions import ClientError
 from pydantic import BaseModel
 from pydantic import SecretStr
@@ -76,7 +76,7 @@ def get_redshift_conn():
     return connection
 
 
-def handler(event, context, connection):
+def handler(event, context, connection=None):
     if connection is None:
         try:
             connection = get_redshift_conn()
