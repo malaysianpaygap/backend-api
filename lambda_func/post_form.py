@@ -1,11 +1,13 @@
+import base64
 import json
 
 import boto3
-from botocore.exceptions import ClientError
-import psycopg2
 import psycopg2.extras
+from botocore.exceptions import ClientError
+from pydantic import BaseModel
+from pydantic import SecretStr
 
-from pydantic import BaseModel, SecretStr
+SECRET_NAME = "rds-write-insert-salary-test"  # nosec
 
 
 class Credentials(BaseModel):
@@ -65,7 +67,7 @@ def get_aws_secret(
 def get_redshift_conn():
     """Creates a connection to Redshift based on credentials"""
     credentials = Credentials(
-        get_aws_secret(secret_name="rds-write-prod-secrets"),
+        **get_aws_secret(secret_name=SECRET_NAME),
     )
     # way to convert user and password of type SecretStr to str
     # refer to https://stackoverflow.com/a/65277859/13337635
